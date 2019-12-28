@@ -35,7 +35,48 @@
           <input type="submit" class="input_sub" value="登 录" />
         </form>
       </div>
+
+      <!-- Button trigger modal -->
+      <!-- <button
+        type="button"
+        class="btn btn-primary btn-lg"
+        data-toggle="modal"
+        data-target="#myModal"
+      >
+        Launch demo modal
+      </button> -->
+      <!-- Modal -->
     </div>
+    <div
+      class="modal fade"
+      id="myModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel">温馨提示</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">
+              关闭
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="../js/ajax.js"></script>
     <script>
       $(function() {
         $(".login_form").submit(function(e) {
@@ -47,7 +88,8 @@
             .val()
             .trim();
           if (input_txt === "" || input_pass === "") {
-            alert("账号和密码不能为空");
+            $("#myModal").modal({ keyboard: true });
+            $(".modal-body").html("傻子，用户名或密码不能为空");
             return;
           }
           console.log(input_txt, input_pass);
@@ -66,12 +108,13 @@
               const token = res.token;
               if (code === 200) {
                 //弹出提示信息
-                alert(msg);
+
+                $(".modal-body").html(msg);
                 localStorage.setItem("token", token);
                 location.href = "./index.html";
-              } else {
-                alert(msg);
               }
+              $(".modal-body").html(msg);
+              $("#myModal").modal({ keyboard: true });
             }
           });
         });
