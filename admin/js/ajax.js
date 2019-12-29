@@ -1,6 +1,7 @@
 (function(window) {
   //获取有没有token令牌
   const token = localStorage.getItem("token");
+  //为以后要用到的Ajax请求设置默认的值
   $.ajaxSetup({
     beforeSend(xhr) {
       if (!token) {
@@ -13,4 +14,5 @@
       }
     }
   });
+  var baseUrl = "http://localhost:8080/api/v1/admin/user/detail";
 })(window);

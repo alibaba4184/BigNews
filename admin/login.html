@@ -76,7 +76,7 @@
         </div>
       </div>
     </div>
-    <script src="../js/ajax.js"></script>
+
     <script>
       $(function() {
         $(".login_form").submit(function(e) {
@@ -103,6 +103,8 @@
             dataType: "json",
             //返回数据成功的回调函数
             success: function(res) {
+              console.log(res);
+
               const code = res.code;
               const msg = res.msg;
               const token = res.token;
@@ -113,6 +115,7 @@
                 localStorage.setItem("token", token);
                 location.href = "./index.html";
               }
+              console.log(res);
               $(".modal-body").html(msg);
               $("#myModal").modal({ keyboard: true });
             }
