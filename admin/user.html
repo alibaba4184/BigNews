@@ -110,7 +110,38 @@
         </form>
       </div>
     </div>
+    <div
+      class="modal fade"
+      id="myModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel">温馨提示</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">
+              关闭
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="./js/http.js"></script>
+    <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
     <script>
       $(function() {
         const token = localStorage.getItem("token");
@@ -125,7 +156,7 @@
             Authorization: token
           },
           success: function(back_data) {
-            // console.log(back_data);
+            console.log(back_data);
             $(".username").val(back_data.data.username);
             $(".nickname").val(back_data.data.nickname);
             $(".email").val(back_data.data.email);
@@ -164,8 +195,11 @@
             success: function(backdata) {
               console.log(backdata);
               if (backdata.code === 200) {
-                alert(backdata.msg);
-                // window.parent.location.reload();
+                $(".modal-body").html(backdata.msg);
+                $("#myModal").modal({ keyboard: true });
+                $("button .btn-primary").on("click", function() {
+                  parent.location.reload();
+                });
               }
             }
           });

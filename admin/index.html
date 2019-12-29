@@ -86,7 +86,7 @@
       <!-- 右侧主体内容 -->
       <div class="main" id="main_body">
         <iframe
-          style="width:100%;height:500px"
+          style="width:100%;height:800px"
           name="main_frame"
           frameborder="0"
         ></iframe>
@@ -96,10 +96,24 @@
       <script>
         $(function() {
           //点击文章管理
-          $(".menu .level01 a").on("click", function() {
-            $(".menu .level02")
-              .stop()
-              .slideToggle(800);
+          $(".menu .level01").on("click", function() {
+            $(this)
+              .addClass("active")
+              .siblings()
+              .removeClass("active");
+            if (
+              $(this)
+                .next()
+                .hasClass("level02")
+            ) {
+              $(this)
+                .next()
+                .stop()
+                .slideToggle(800);
+              $(this)
+                .find("b")
+                .animate({});
+            }
           });
 
           //   const token = localStorage.getItem("token");
