@@ -113,7 +113,15 @@
               $(this)
                 .find("b")
                 .toggleClass("rotate0");
+            } else {
+              $(".level02>li").removeClass("active");
             }
+          });
+          $(".level02>li").on("click", function() {
+            $(this)
+              .addClass("active")
+              .siblings()
+              .removeClass("active");
           });
 
           //   const token = localStorage.getItem("token");
