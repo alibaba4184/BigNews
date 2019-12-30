@@ -14,6 +14,19 @@
     <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
     <!-- 引入模板引擎js文件 -->
     <script src="./libs/template-web.js"></script>
+    <script src="./js/http.js"></script>
+    <script id="art_cat" type="text/html">
+       {{each data}}
+       <tr>
+        <td>{{$value.name}}</td>
+        <td>{{$value.slug}}</td>
+        <td class="text-center">
+            <a href="javascript:void(0)" data-toggle="modal" data-target="#myModal" class=" btn btn-info btn-xs">编辑</a>
+            <a href="javascript:void(0)" class="btn btn-danger btn-xs">删除</a>
+        </td>
+    </tr>
+       {{/each}}
+    </script>
 </head>
 
 <body>
@@ -35,15 +48,15 @@
                         <td>奇趣事</td>
                         <td>funny</td>
                         <td class="text-center">
-                            <a href="" data-toggle="modal" data-target="#myModal" class=" btn btn-info btn-xs">编辑</a>
-                            <a href="" class="btn btn-danger btn-xs">删除</a>
+                            <a href="#" data-toggle="modal" data-target="#myModal" class=" btn btn-info btn-xs">编辑</a>
+                            <a href="javascript:void(0)" class="btn btn-danger btn-xs">删除</a>
                         </td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr>
                         <td colspan="3" class="text-center">
-                            <a href="" class="btn btn-success" id="xinzengfenlei" data-toggle="modal"
+                            <a href="javascript:void(0)" class="btn btn-success" id="xinzengfenlei" data-toggle="modal"
                                 data-target="#myModal">新增分类</a>
                         </td>
                     </tr>
@@ -109,16 +122,28 @@
             如果e.relatedTarget是新增 ->则执行新增按钮逻辑
             如果e.relatedTarget是编辑 ->则执行编辑按钮逻辑
     */
-//模态框出现之前，先要获取到数据渲染到页面中
+
 
     
+   $(function(){
+      //模态框出现之前，先要获取到数据渲染到页面中 
+      //页面一加载就先将数据获取到并渲染到页面
+      $.ajax({
+          type:"get",
+          utrl:BigNew.category_list,
+          dataType:"json",
+          success:function(backdata){
+              console.log(backdata);
+              
+             $('.category_table>tbody').html(template("art_cat",backdata));
+          }
+
+      })
+      //模态框弹出
     $('#myModal').on('show.bs.modal', function (e) {
         
-        if(e.relatedTarget.text==="新增分类"){
-           
-        }
-        
     })
+   })
 </script>
 
 </html>
