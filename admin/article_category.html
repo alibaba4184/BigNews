@@ -187,6 +187,7 @@
 
         } else {
           $("#addModal").attr("class", "btn btn-success");
+          $('#myModal form').trigger('reset'); // 给表单添加重置触发事件
         }
       });
       //模态框取消按钮点击事件
@@ -233,7 +234,7 @@
                success:function(backData){
                    console.log(backData);
                    if(backData.code===200){
-                       alert('编辑成功');
+                       alert(backData.msg);
                        //当前页面进行刷新
                        window.location.reload();
 

@@ -9,10 +9,26 @@
     <link rel="stylesheet" href="css/reset.css" />
     <link rel="stylesheet" href="css/iconfont.css" />
     <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="./libs/jedate/css/jeDate-test.css" />
+    <link rel="stylesheet" href="./libs/jedate/css/jedate.css" />
     <!-- jq -->
     <script src="./libs/jquery-1.12.4.min.js"></script>
     <!-- 模板引擎 -->
     <script src="./libs/template-web.js"></script>
+    <!-- 引入jedate插件 -->
+    <script src="./libs/jedate/js/jedate.js"></script>
+    <!-- 引入富文本编辑器插件 -->
+    <script src="./libs/tinymce/tinymce.min.js"></script>
+    <!-- 引入jeDate +tinumce配置文件 -->
+    <script src="./libs/config.js"></script>
+    <!-- 引入ajax的默认值文件 -->
+    <script src="./js/ajax.js"></script>
+    <!-- 引入接口文件 -->
+    <script src="./js/http.js"></script>
+    <!-- 引入模板引擎文件 -->
+    <script src="./libs/template-web.js"></script>
+    <!-- 引入bootstrap.js文件 -->
+    <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
   </head>
 
   <body>
@@ -95,10 +111,20 @@
           </div>
           <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-              <button type="submit" class="btn btn-success btn-release">
+              <button
+                type="submit"
+                class="btn btn-success btn-release"
+                data-toggle="modal"
+                data-target="#myModal"
+              >
                 发布
               </button>
-              <button type="submit" class="btn btn-default btn-draft">
+              <button
+                type="submit"
+                class="btn btn-default btn-draft"
+                data-toggle="modal"
+                data-target="#myModal"
+              >
                 存为草稿
               </button>
             </div>
@@ -106,5 +132,102 @@
         </form>
       </div>
     </div>
+    <!-- //模态框 -->
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="myModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title" id="myModalLabel">温馨提示</h4>
+          </div>
+          <div class="modal-body">
+            ...
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-dismiss="modal">
+              确认
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- js业务代码开始 -->
+    <!-- form -->
+    <script id="optionList" type="text/html">
+      {{each data}}
+      <option value='{{$value.id}}'>{{$value.name}}</option>
+      {{/each}}
+    </script>
+    <script>
+      $(function() {
+        //加载文章类别
+        $.ajax({
+          type: "get",
+          url: BigNew.category_list,
+          success: function(backdata) {
+            console.log(backdata);
+            $("select.category").html(template("optionList", backdata));
+          }
+        });
+
+        //文件预览
+        $("#inputCover").change(function() {
+          const file = this.files[0];
+          const url = URL.createObjectURL(file);
+          $(".article_cover").attr("src", url);
+        });
+        //发布文章
+        $(".btn-release").on("click", function(e) {
+          e.preventDefault();
+          articleRelease("已发布");
+        });
+        //存为草稿
+        $(".btn-draft").on("click", function(e) {
+          e.preventDefault();
+          articleRelease("草稿");
+        });
+
+        function articleRelease(state) {
+          // $.ajaxSetup();
+          const fdata = new FormData($("#form")[0]);
+          //追加文章内容
+          fdata.append("content", tinyMCE.activeEditor.getContent());
+          //追加文章状态
+          fdata.append("state", state);
+          $.ajax({
+            type: "post",
+            url: BigNew.article_publish,
+            dataType: "json",
+            data: fdata,
+            contentType: false,
+            processData: false, //禁止对二进制进行编码
+            success: function(response) {
+              console.log(response);
+              const code = response.code;
+              if (code === 200) {
+                $(".modal-body").html(response.msg);
+                $("#myModal").modal({ keyboard: true });
+                // alert(response.msg);
+              }
+            }
+          });
+        }
+      });
+    </script>
   </body>
 </html>
