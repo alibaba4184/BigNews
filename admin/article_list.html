@@ -16,6 +16,10 @@
     <script src="./js/http.js"></script>
     <!-- 引入ajax默认值文件 -->
     <script src="./js/ajax.js"></script>
+    <!-- 引入bootstrap.js -->
+    <script src="./libs/bootstrap/js/bootstrap.min.js"></script>
+    <!-- 引入分页器插件 -->
+    <script src="./libs/jquery.twbsPagination.js"></script>
   </head>
 
   <body>
@@ -84,7 +88,9 @@
             </tr>
           </tbody>
         </table>
-        <div class="row text-center"></div>
+        <div class="row text-center">
+          <ul id="pagination" class="pagination-sm"></ul>
+        </div>
       </div>
     </div>
   </body>
@@ -92,7 +98,7 @@
   <script id="selectList" type="text/html">
     <option value="">所有分类</option>
     {{each data}}
-    <option>{{$value.name}}</option>
+    <option value="{{$value.id}}">{{$value.name}}</option>
     {{/each}}
   </script>
 
@@ -101,11 +107,11 @@
         <tr>
             <td>{{$value.title}}</td>
             <td>杰克</td>
-            <td>{{$value.type}}</td>
+            <td>{{$value.category}}</td>
             <td class="text-center">{{$value.date}}</td>
             <td class="text-center">{{$value.state}}</td>
             <td class="text-center">
-              <a href="article_edit.html" class="btn btn-default btn-xs"
+              <a href="article_edit.html?id={{$value.id}}" class="btn btn-default btn-xs"
               data-id="{{$value.id}}"
                 >编辑</a
               >
@@ -134,8 +140,10 @@
       //给筛选按钮添加点击事件
       $("#btnSearch").on("click", function(e) {
         e.preventDefault();
-        articleList(1);
+        articleList();
       });
+      //页面一加载就获取数据
+      $("#btnSearch").trigger("click");
       function articleList(currentPage) {
         $.ajax({
           type: "get",
@@ -151,10 +159,56 @@
             console.log(backdata);
             if (backdata.code === 200) {
               $(".table>tbody").html(template("article_list", backdata));
+              const totalPages = backdata.data.totalCount;
+              //调用分页器
+              resetPage(totalPages, currentPage);
             }
           }
         });
       }
+      //删除文章
+      $("table>tbody").on("click", ".delete", function() {
+        $.ajax({
+          type: "post",
+          url: BigNew.article_delete,
+          dataType: "json",
+          data: {
+            id: $(this).attr("data-id")
+          },
+          success: function(backdata) {
+            console.log(backdata);
+            if (backdata.code === 204) {
+              alert(backdata.msg);
+              //局部刷新
+              articleList();
+            } else {
+              alert(backdata.msg);
+            }
+          }
+        });
+      });
+      resetPage();
+      function resetPage(totalPages, startPage) {
+        //销毁旧的分页器
+        $("#pagination").twbsPagination("destroy");
+        //加载分页器
+        $("#pagination").twbsPagination({
+          totalPages: totalPages,
+          startPage: startPage,
+          visiblePage: 7,
+          first: "首页",
+          prev: "上一页",
+          next: "下一页",
+          last: "尾页",
+          onPageClick: function(event, page) {
+            if (startPage !== page) {
+              articleList(page);
+            }
+          }
+        });
+      }
+
+      //入口函数尾部
     });
   </script>
 </html>

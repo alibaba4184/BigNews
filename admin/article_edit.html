@@ -1,72 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>文章列表</title>
-    <link rel="stylesheet" href="./libs/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/iconfont.css">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="./libs/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/iconfont.css" />
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="./libs/jedate/css/jeDate-test.css" />
+    <link rel="stylesheet" href="./libs/jedate/css/jedate.css" />
     <!-- jq -->
     <script src="./libs/jquery-1.12.4.min.js"></script>
     <!-- 模板引擎 -->
     <script src="./libs/template-web.js"></script>
-</head>
+    <!-- jsdate日期插件引入 -->
+    <script src="./libs/jedate/js/jedate.js"></script>
+    <!-- tinymce富文本编辑器插件 -->
+    <script src="./libs/tinymce/tinymce.min.js"></script>
+    <!-- jedate +tinumce配置文件 -->
+    <script src="./libs/config.js"></script>
+    <!-- 引入接口文件 -->
+    <script src="./js/http.js"></script>
+    <script src="./js/ajax.js"></script>
+  </head>
 
-<body>
+  <body>
     <div class="container-fluid">
-        <div class="common_title">
-            文章编辑
-        </div>
-        <div class="container-fluid common_con">
-            <form class="form-horizontal article_form" id="form">
-                <div class="form-group">
-                    <label for="inputTitle" class="col-sm-2 control-label">文章标题：</label>
-                    <div class="col-sm-10">
-                        <input type="text" name="title" class="form-control title" id="inputTitle" value="文章标题文字">
-                    </div>
+      <div class="common_title">
+        文章编辑
+      </div>
+      <div class="container-fluid common_con">
+        <form class="form-horizontal article_form" id="form">
+          <div class="form-group">
+            <label for="inputTitle" class="col-sm-2 control-label"
+              >文章标题：</label
+            >
+            <div class="col-sm-10">
+              <input
+                type="text"
+                name="title"
+                class="form-control title"
+                id="inputTitle"
+                value="文章标题文字"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputCover" class="col-sm-2 control-label"
+              >文章封面：</label
+            >
+            <div class="col-sm-10">
+              <img src="images/pic06.jpg" class="article_cover" />
+              <input name="cover" type="file" id="inputCover" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputCategory" class="col-sm-2 control-label"
+              >文章类别：</label
+            >
+            <div class="col-sm-4">
+              <select class="form-control category" name="categoryId">
+                <option>类别一</option>
+                <option>类别二</option>
+                <option>类别三</option>
+                <option selected>类别四</option>
+                <option>类别五</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">发布时间：</label>
+            <div class="col-sm-4">
+              <div class="jeitem">
+                <div class="jeinpbox">
+                  <input
+                    type="text"
+                    name="date"
+                    class="jeinput"
+                    id="testico"
+                    placeholder="YYYY-MM-DD"
+                  />
+                  <div
+                    class="icons jebtns"
+                    onclick="jeDate('#testico',{trigger:false,format: 'YYYY-MM-DD',theme: { bgcolor: '#00A680', pnColor: '#00DDAA' }})"
+                  ></div>
                 </div>
-                <div class="form-group">
-                    <label for="inputCover" class="col-sm-2 control-label">文章封面：</label>
-                    <div class="col-sm-10">
-                        <img src="images/pic06.jpg" class="article_cover">
-                        <input name="cover" type="file" id="inputCover">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="inputCategory" class="col-sm-2 control-label">文章类别：</label>
-                    <div class="col-sm-4">
-                        <select class="form-control category" name="categoryId">
-                            <option>类别一</option>
-                            <option>类别二</option>
-                            <option>类别三</option>
-                            <option selected>类别四</option>
-                            <option>类别五</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">发布时间：</label>
-                    <div class="col-sm-4">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-2 control-label">文章内容：</label>
-                    <div class="col-sm-10">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success btn-edit">修改</button>
-                        <button type="submit" class="btn btn-default btn-draft">存为草稿</button>
-                    </div>
-                </div>
-            </form>
-        </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label"
+              >文章内容：</label
+            >
+            <div class="col-sm-10">
+              <input
+                type="text"
+                class="form-control"
+                id="mytextarea"
+                placeholder="文章内容"
+                value="文章内容"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <button type="submit" class="btn btn-success btn-edit">
+                修改
+              </button>
+              <button type="submit" class="btn btn-default btn-draft">
+                存为草稿
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
-</body>
+    <!-- 模板引擎 -->
+    <script id="selectList" type="text/html">
+      {{each}}
+      <option value="{{$value.id}}">{{$value.name}}</option>
+      {{/each}}
+    </script>
+    <script>
+      $(function() {
+        //获取地址栏的id
+        const Aid = +location.search.split("=")[1];
+        console.log(Aid);
+        //加载文章类别
+        $.ajax({
+          type: "get",
+          url: BigNew.category_list,
+          success: function(backdata) {
+            console.log(backdata);
+            const data = backdata.data;
+            $(".category").html(template("selectList", data));
+          }
+        });
+        //图片预览功能部分
+        $("#inputCover").change(function() {
+          const file = this.files[0];
+          const url = URL.createObjectURL(file);
+          $(".article_cover").attr("src", url);
+        });
 
+        //加载文章内容
+        $.ajax({
+          type: "get",
+          url: BigNew.article_search,
+          dataType: "json",
+          data: {
+            id: Aid
+          },
+          success: function(backdata) {
+            console.log(backdata);
+            const data = backdata.data;
+            if (backdata.code == 200) {
+              //把数据显示在页面上
+              $("input.title").val(data.title); //文章标题
+              $(".article_cover").attr("src", data.cover); //文章封面
+              $("select.category").val(data.categoryId); //文章类别
+              $("#testico").val(data.date); //文章日期
+
+              /*细节：由于tinymce比较复杂，加载需要时间。
+                        一旦网速过快，就有可能导致数据已经返回，但是插件还没加载完的情况
+                        解决方案：使用定时器延迟加载（可以添加一个loading动画迷惑用户）
+                        */
+              setTimeout(function() {
+                tinymce.activeEditor.setContent(backdata.data.content); //这个知识点不太清楚
+              }, 200);
+            }
+          }
+        });
+        //编辑文章
+        //给修改按钮添加点击事件
+        $(".btn-edit").on("click", function(e) {
+          e.preventDefault();
+          articleEdit("已发布");
+        });
+
+        //存为草稿添加点击事件
+        $(".btn-draft").on("click", function(e) {
+          e.preventDefault();
+          articleEdit("草稿");
+        });
+
+        //编辑文章封装函数
+        function articleEdit(state) {
+          const form = $("#form")[0];
+          const fdata = new FormData(form);
+          //追加文章内容
+          fdata.append("content", tinyMCE.activeEditor.getContent());
+          //追加文章状态
+          fdata.append("state", state);
+          //追加文章id
+          fdata.append("id", Aid);
+          $.ajax({
+            type: "post",
+            url: BigNew.article_edit,
+            dataType: "json",
+            data: fdata,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+              console.log(response);
+              if (response.code === 200) {
+                alert(response.msg);
+                //回退上一页
+                window.history.back();
+              } else {
+                alert(response.msg);
+              }
+            }
+          });
+        }
+      });
+    </script>
+  </body>
 </html>

@@ -159,6 +159,7 @@
 
       //模态框出现之前，先要获取到数据渲染到页面中
       //页面一加载就先将数据获取到并渲染到页面
+     function getCategory(){
       $.ajax({
         url: BigNew.category_list,
         type: "get",
@@ -168,6 +169,8 @@
           $(".category_table>tbody").html(template("art_cat", backData));
         }
       });
+     }
+     getCategory();
       //模态框弹出
       $("#myModal").on("show.bs.modal", function(e) {
         const txt = $(e.relatedTarget).text();
@@ -258,7 +261,7 @@
             if(backData.code===204){
                 alert(backData.msg);
             }
-            window.location.reload();
+            getCategory();
                
            }
        })
