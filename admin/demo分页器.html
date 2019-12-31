@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./libs/bootstrap/css/bootstrap.min.css" />
+    <script src="./libs/jquery-1.12.4.min.js"></script>
+    <!-- 引入分页插件 -->
+    <script src="./libs/jquery.twbsPagination.js"></script>
+  </head>
+  <body>
+    <ul id="pagination" class="pagination-sm"></ul>
+    <input type="text" value="" />
+    <button>设置页数</button>
+
+    <!-- 封装分页器 -->
+    <script>
+      //给button添加点击事件
+      $("button").click(function(e) {
+        e.preventDefault();
+        const jumpPage = $('[type="text"]').val();
+        resetPage(jumpPage);
+      });
+      resetPage();
+      function resetPage(totalPages, startPage) {
+        //销毁旧分页器
+        $("#pagination").twbsPagination("destroy");
+        //加载分页器
+        $("#pagination").twbsPagination({
+          totalPages: 20,
+          startPage: startPage,
+          visiblePages: 6,
+          first: "首页",
+          prev: "上一页",
+          next: "下一页",
+          last: "尾页",
+          onPageClick: function(event, page) {
+            console.log("当前page", page);
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -136,7 +136,7 @@
           $("#selCategory").html(template("selectList", backdata));
         }
       });
-
+      let currentPage;
       //给筛选按钮添加点击事件
       $("#btnSearch").on("click", function(e) {
         e.preventDefault();
@@ -144,6 +144,7 @@
       });
       //页面一加载就获取数据
       $("#btnSearch").trigger("click");
+
       function articleList(currentPage) {
         $.ajax({
           type: "get",
@@ -157,9 +158,9 @@
           },
           success: function(backdata) {
             console.log(backdata);
+            const totalPages = backdata.data.totalPage;
             if (backdata.code === 200) {
               $(".table>tbody").html(template("article_list", backdata));
-              const totalPages = backdata.data.totalCount;
               //调用分页器
               resetPage(totalPages, currentPage);
             }
@@ -178,11 +179,9 @@
           success: function(backdata) {
             console.log(backdata);
             if (backdata.code === 204) {
-              alert(backdata.msg);
+              // alert(backdata.msg);
               //局部刷新
-              articleList();
-            } else {
-              alert(backdata.msg);
+              articleList(currentPage);
             }
           }
         });
@@ -195,14 +194,16 @@
         $("#pagination").twbsPagination({
           totalPages: totalPages,
           startPage: startPage,
-          visiblePage: 7,
+          visiblePages: 6,
           first: "首页",
           prev: "上一页",
           next: "下一页",
           last: "尾页",
           onPageClick: function(event, page) {
+            console.log("page当前页", page);
             if (startPage !== page) {
               articleList(page);
+              currentPage = page;
             }
           }
         });

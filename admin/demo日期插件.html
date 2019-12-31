@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./libs/bootstrap/css/bootstrap.min.css" />
+    <script src="./libs/jquery-1.12.4.min.js"></script>
+    <!-- 引入jedate插件 -->
+    <script src="./libs/jedate/js/jedate.js"></script>
+    <link rel="stylesheet" href="./libs/jedate/css/jedate.css" />
+    <!-- 引入配置文件 -->
+  </head>
+  <body>
+    <input id="indate" type="text" placeholder="请选择" readonly />
+    <!-- <div id="dateinfo"><div> -->
+
+    <!-- 日期插件函数js部分 -->
+    <script>
+      $(function() {
+        //或者为这样的
+        jeDate("#indate", {
+          format: " YYYY-MM-DD hh:mm:ss",
+          isTime: false,
+          festival: true,
+          minDate: "2014-09-19 00:00:00",
+          theme: { bgcolor: "#00A680", pnColor: "#00DDAA" }
+        });
+      });
+    </script>
+  </body>
+</html>
