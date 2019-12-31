@@ -137,6 +137,7 @@
         }
       });
       let currentPage;
+      let length;
       //给筛选按钮添加点击事件
       $("#btnSearch").on("click", function(e) {
         e.preventDefault();
@@ -157,8 +158,11 @@
             page: currentPage
           },
           success: function(backdata) {
-            console.log(backdata);
+            // console.log(backdata);
             const totalPages = backdata.data.totalPage;
+            length = backdata.data.data.length;
+            console.log(length);
+
             if (backdata.code === 200) {
               $(".table>tbody").html(template("article_list", backdata));
               //调用分页器
@@ -177,11 +181,14 @@
             id: $(this).attr("data-id")
           },
           success: function(backdata) {
-            console.log(backdata);
+            // console.log(backdata);
             if (backdata.code === 204) {
-              // alert(backdata.msg);
+              alert(backdata.msg);
               //局部刷新
-              articleList(currentPage);
+              //当删除掉最后一条数据的时候进行判断，当前页跳到前一页：如21 到20
+              if (length === 1) {
+                articleList(currentPage - 1);
+              }
             }
           }
         });
