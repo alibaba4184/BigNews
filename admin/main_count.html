@@ -38,7 +38,6 @@
     <div class="container-fluid">
       <div class="column_pannel" id="column_show"></div>
     </div>
-
     <!-- 折线图 -->
     <!-- <script>
       var json =
@@ -132,7 +131,7 @@
     </script> -->
 
     <!-- 环形图 -->
-    <script>
+    <!-- <script>
       // 基于准备好的dom，初始化echarts实例
       var myChart1 = echarts.init(document.getElementById("pie_show"));
 
@@ -179,9 +178,9 @@
       };
       // 使用刚指定的配置项和数据显示图表。
       myChart1.setOption(option1);
-    </script>
+    </script> -->
     <!-- 柱状图 -->
-    <script>
+    <!-- <script>
       // 基于准备好的dom，初始化echarts实例
       var myChart2 = echarts.init(document.getElementById("column_show"));
 
@@ -250,7 +249,7 @@
 
       // 使用刚指定的配置项和数据显示图表。
       myChart2.setOption(option2);
-    </script>
+    </script> -->
     <!-- 模板一 -->
     <script id="spannelInfo" type="text/html">
       <div class="col-sm-3 col-xs-6">
@@ -383,6 +382,136 @@
               // 使用刚指定的配置项和数据显示图表。
               myChart.setOption(option);
             }
+          }
+        });
+
+        //环形图
+        // 基于准备好的dom，初始化echarts实例
+        var myChart1 = echarts.init(document.getElementById("pie_show"));
+        //发送ajax请求
+        $.ajax({
+          type: "get",
+          url: BigNew.data_category,
+          dataType: "json",
+          success: function(response) {
+            // console.log(response);
+            const dataArr = response.date;
+            let data = [];
+            for (var i = 0; i < dataArr.length; i++) {
+              data[i] = { value: dataArr[i].articles, name: dataArr[i].name };
+            }
+            // console.log(data);
+
+            //饼状图的配置项和数据
+            option1 = {
+              title: {
+                left: "center",
+                text: "分类文章数量比"
+              },
+              tooltip: {
+                trigger: "item",
+                formatter: "{a} <br/>{b}: {c} ({d}%)"
+              },
+              legend: {
+                orient: "horizontal",
+                x: "center",
+                data: ["爱生活", "爱旅行", "爱美食", "爱运动", "经济特区"],
+                top: 30
+              },
+              color: ["#5885e8", "#13cfd5", "#00ce68", "#ff9565", "#20ff19"],
+              series: [
+                {
+                  name: "分类名称",
+                  type: "pie",
+                  radius: ["50%", "70%"],
+                  avoidLabelOverlap: false,
+                  label: {
+                    emphasis: {
+                      show: true,
+                      textStyle: {
+                        fontSize: "30",
+                        fontWeight: "bold"
+                      }
+                    }
+                  },
+                  data: data
+                }
+              ]
+            };
+            // 使用刚指定的配置项和数据显示图表。
+            myChart1.setOption(option1);
+          }
+        });
+
+        //分类访问量
+        //柱形图
+        // 基于准备好的dom，初始化echarts实例
+        var myChart2 = echarts.init(document.querySelector("#column_show"));
+        //发送ajax请求获取数据
+        $.ajax({
+          type: "get",
+          url: BigNew.data_visit,
+          dataType: "json",
+          success: function(response) {
+            // console.log(response);
+            const data = response.data;
+            // console.dir(data);
+            //获取访问量的数据
+            let Data = [];
+            //获取日期
+            let date = [];
+            for (var key in data) {
+              Data.unshift(data[key]);
+              date.unshift(key);
+            }
+            // console.log(Data);
+            // console.log(date);
+
+            option2 = {
+              title: {
+                left: "center",
+                text: "日访问量"
+              },
+              tooltip: {
+                trigger: "axis",
+                axisPointer: {
+                  // 坐标轴指示器，坐标轴触发有效
+                  type: "line" // 默认为直线，可选为：'line' | 'shadow'
+                }
+              },
+              legend: {
+                data: ["日访问量"],
+                top: 30
+              },
+              grid: {
+                left: "3%",
+                right: "4%",
+                bottom: "3%",
+                containLabel: true
+              },
+              xAxis: [
+                {
+                  type: "category",
+                  data: date //这里为日期
+                }
+              ],
+              yAxis: [
+                {
+                  type: "value"
+                }
+              ],
+              color: ["#5885e8"], //, "#13cfd5", "#00ce68", "#ff9565", "#20ff19"
+              series: [
+                {
+                  name: "日访问量",
+                  type: "bar",
+                  data: Data //这里显示访问量的数据
+                }
+              ]
+            };
+            // 使用刚指定的配置项和数据显示图表。
+            myChart2.setOption(option2);
+            //柱形图
           }
         });
       });
