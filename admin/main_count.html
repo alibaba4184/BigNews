@@ -389,12 +389,14 @@
         // 基于准备好的dom，初始化echarts实例
         var myChart1 = echarts.init(document.getElementById("pie_show"));
         //发送ajax请求
+        myChart1.showLoading();
         $.ajax({
           type: "get",
           url: BigNew.data_category,
           dataType: "json",
           success: function(response) {
             // console.log(response);
+            myChart1.hideLoading();
             const dataArr = response.date;
             let data = [];
             for (var i = 0; i < dataArr.length; i++) {
