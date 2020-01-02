@@ -186,8 +186,10 @@
               alert(backdata.msg);
               //局部刷新
               //当删除掉最后一条数据的时候进行判断，当前页跳到前一页：如21 到20
-              if (length === 1) {
+              if (length === 1 && currentPage !== 1) {
                 articleList(currentPage - 1);
+              } else {
+                articleList(currentPage);
               }
             }
           }
